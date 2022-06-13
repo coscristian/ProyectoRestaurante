@@ -40,8 +40,36 @@ food_menu = {
     ]
 }
 
+"""
+Orders (dict) contains all the order asked by the user with its corresponding table number
+orders = {'Table number 1': [('food', price), ('food',price), ...],
+          'Table number 2': [('food',price), ('food',price), ...]
+        ...
+        } 
+"""
+orders = {} 
 
-tables = []
+def save_order(table_number: int, value_to_order: int, food_for_today: list):
+    """
+    Saves in the orders (dict:global) the food that the user has asked for
+    Parameters:
+    -----------
+        table_number (int): Identifier for the table in the restaurant
+        value_to_order (int): Identifier for the order(food) that the user asked for
+        food_for_today (list): List of tuples which contains the food for the day
+    Returns:
+    -----------
+        str: Saved Successfully
+    """
+    counter = 1
+    for dict_of_food in food_for_today:
+        for food, price in dict_of_food.items():
+            if counter == value_to_order:
+                try:
+                    orders[table_number].append((food,price)) #En caso de que la mesa ya haya realizado pedidos, agrega a la lista de tuplas, una tupla con el pedido nuevo
+                except:
+                    orders[table_number] = [(food,price)]  #Si la mesa no hay realizado pedidos (No hay campo mesa para el diccionario)
+            counter+=1
 
 def get_food_for_today(food_per_week: list, today: str):
     """

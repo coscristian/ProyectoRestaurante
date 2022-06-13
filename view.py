@@ -1,5 +1,17 @@
 import os
 
+def verify_option(user_input: int, limit_value: int) -> int:
+    invalid_value = True
+    flag_first_time_error = False
+    while invalid_value:
+        if flag_first_time_error:
+            user_input = read_user_int("Qué deseas ordenar?: ")
+        if 0 < user_input <= limit_value:
+            invalid_value = False
+        else:
+            show_invalid("Número de pedido no existe")
+            flag_first_time_error = True
+    return user_input
 
 def show_food_for_today(food_for_today: list):
     counter = 1
@@ -7,7 +19,7 @@ def show_food_for_today(food_for_today: list):
         for food, price in food_dict.items():
             print(f"\t{counter}. {food} --> {price}")
             counter+=1
-            
+
 def show_invalid(message: str):
     print()
     print(f"{message}")
@@ -29,7 +41,7 @@ def clear_screen():
     os.system('clear')
 
 def continue_ordering() -> bool:
-    answer = input("Deseas seguir pidiendo? (s/n): ")     
+    answer = input("Deseas continuar ordenando? (s/n): ")     
     if answer == "s" or answer == "S":
         return True
     elif answer == "n" or answer == "N":
