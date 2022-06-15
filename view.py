@@ -1,5 +1,18 @@
 import os
 
+def show_specific_table_number(table_number: int):
+    print(f"Ordenes de la mesa {table_number}")
+
+def show_title_order():
+    print("="*35)
+    print(f"{'Pedido':^10} {'Estado':^10} {'Precio (COP)':^10}")
+    print("-"*35)
+
+def show_table_order(table_order: list):
+    for food_tuple in table_order:
+        print(f"{food_tuple[0]:^10} {'Pendiente':^10} {food_tuple[1]:^10}")
+    print()
+
 def verify_option(user_input: int, limit_value: int) -> int:
     invalid_value = True
     flag_first_time_error = False
@@ -59,7 +72,6 @@ def show_title(title=''):
     print(title.upper())
     print("-"*30)
 
-
 def read_user_int(message = "Seleccione una opción: ") -> int:
     valid_input = False
     while not valid_input:
@@ -74,13 +86,9 @@ def read_user_int(message = "Seleccione una opción: ") -> int:
             print("")
     return v
 
-
 def option_principal_menu() -> int:
     show_title("Restaurante el corrientazo")
-    #print("-"*25)
-
     show_title("Menu principal")
-    #print("-"*25)
     print("1. Adicionar pedido")
     print("2. Consultar una mesa")
     print("3. Listar mesas")
@@ -90,5 +98,4 @@ def option_principal_menu() -> int:
     print("7. Calcular valor total a pagar")
     print("8. Actualizar estado de una mesa")
     print("-"*25)
-
     return read_user_int()

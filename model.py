@@ -1,3 +1,5 @@
+from matplotlib.font_manager import json_dump
+import json
 
 work_days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes']
 
@@ -49,9 +51,80 @@ orders = {'Table number 1': [('food', price), ('food',price), ...],
 """
 orders = {} 
 
+def there_are_registered_tables():
+    """
+    Checks out if there is at least one registered table
+    Returns:
+    --------
+        bool: True if there's at least one registered table
+    """
+    return True if len(orders) > 0 else False
+
+
+def load_file(file_path: str = "ordenes.json"):
+    """
+    Loads the information from the file, then converts the json string identifier for the registered tables into int
+    Parameters:
+    -----------
+        file_path (str): Name of the file to read
+    Raises:
+    -----------
+        Exception: Exception raised if any error occurs
+    """
+    try:
+        global orders
+        with open(file_path) as json_file:
+            orders = json.load(json_file)
+    except:
+        with open(file_path, "w") as json_file:
+            json.dump({}, json_file)    
+    orders = {int(k): v for k,v in orders.items()} #Converts the json string indentifier for the table into int
+
+def write_file(file_path: str = "ordenes.json"):
+    """
+    Writes the registered tables and their ordersinformation on the file
+    Parameters:
+    -----------
+        file_path (str): Name of the file to read
+    Raises:
+    -----------
+        Exception: Exception raised if any error occurs
+    """
+    try:
+        with open(file_path, 'w') as json_file:
+            json.dump(orders, json_file, indent=2)
+    except:
+        raise Exception("No fue posible guardar la información en el archivo.")
+
+def get_table_order(table_number: int):
+    """"
+    Get the list of orders that has been asked for
+    Parameters
+    -----------
+        table_number (int): Identifier for the table
+    Returns
+    -----------
+        list: List of tuples which contains all the orders of the identified table
+    """
+    for table, food in orders.items():
+        if table == table_number:
+            return food
+
+def table_exists(table_number: int):
+    """"
+    Verifies if the number of the introduced exist
+    Parameters
+    -----------
+        table_number (int): Identifier for the table
+    Returns
+    -----------
+        bool: True if the number of table is registered, otherwise returns False
+    """
+    return True if table_number in orders else False
+
 def save_order(table_number: int, value_to_order: int, food_for_today: list):
     """
-    Saves in the orders (dict:global) the food that the user has asked for
+    Saves in the orders (dict:global) the food that the user has asked for, if the table exists, the food is saved in that specific key (table_number)
     Parameters:
     -----------
         table_number (int): Identifier for the table in the restaurant
@@ -61,6 +134,7 @@ def save_order(table_number: int, value_to_order: int, food_for_today: list):
     -----------
         str: Saved Successfully
     """
+    print(f"Food for today --> {food_for_today}")
     counter = 1
     for dict_of_food in food_for_today:
         for food, price in dict_of_food.items():
@@ -68,8 +142,9 @@ def save_order(table_number: int, value_to_order: int, food_for_today: list):
                 try:
                     orders[table_number].append((food,price)) #En caso de que la mesa ya haya realizado pedidos, agrega a la lista de tuplas, una tupla con el pedido nuevo
                 except:
-                    orders[table_number] = [(food,price)]  #Si la mesa no hay realizado pedidos (No hay campo mesa para el diccionario)
+                    orders[table_number] = [(food,price)]  #Si la mesa no ha realizado pedidos (No hay campo mesa para el diccionario)
             counter+=1
+    print(f"Orders --> {orders}")
 
 def get_food_for_today(food_per_week: list, today: str):
     """
