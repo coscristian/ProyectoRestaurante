@@ -1,16 +1,28 @@
 import os
 
+def show_menu_modify_order():
+    print()
+    show_title("Menu para modificar pedido")
+    print("1. Agregar pedido a la mesa seleccionada")
+    print("2. Eliminar pedido de la mesa seleccionada")
+    print("-"*25)
+
 def show_specific_table_number(table_number: int):
     print(f"Ordenes de la mesa {table_number}")
 
-def show_title_order():
-    print("="*35)
-    print(f"{'Pedido':^10} {'Estado':^10} {'Precio (COP)':^10}")
-    print("-"*35)
+def show_header_order():
+    print("="*90)
+    header = f"{'ID':>3s} {'Pedido':40s} {'Estado':15s} {'Precio Unitario(COP)':<20s} {'Cantidad':<2s}"
+    print(header)
+    print("-"*len(header))
 
-def show_table_order(table_order: list):
+def show_table_order(table_order: list, table_number: int):
+    show_title(f"Pedidos de la mesa {table_number}")
+    show_header_order()
+    counter = 1
     for food_tuple in table_order:
-        print(f"{food_tuple[0]:^10} {'Pendiente':^10} {food_tuple[1]:^10}")
+        print(f"{counter:>3d} {food_tuple[0]:40s} {'Pendiente':15s} ${food_tuple[1]:,}{'':<15s} {food_tuple[2]:<2d}")
+        counter+=1
     print()
 
 def verify_option(user_input: int, limit_value: int) -> int:
@@ -53,8 +65,8 @@ def wait_for_input():
 def clear_screen():
     os.system('clear')
 
-def continue_ordering() -> bool:
-    answer = input("Deseas continuar ordenando? (s/n): ")     
+def ask_user_for_bool_input(message: str) -> bool:
+    answer = input(message)     
     if answer == "s" or answer == "S":
         return True
     elif answer == "n" or answer == "N":
@@ -70,7 +82,7 @@ def input_order() -> dict:
 def show_title(title=''):
     print()
     print(title.upper())
-    print("-"*30)
+    print("-"*len(title))
 
 def read_user_int(message = "Seleccione una opción: ") -> int:
     valid_input = False
@@ -92,10 +104,10 @@ def option_principal_menu() -> int:
     print("1. Adicionar pedido")
     print("2. Consultar una mesa")
     print("3. Listar mesas")
-    print("4. Actualizar pedido")
+    print("4. Modificar pedido de mesa")
     print("5. Eliminar mesa")
-    print("6. Eliminar pedido")
-    print("7. Calcular valor total a pagar")
-    print("8. Actualizar estado de una mesa")
+    print("6. Calcular valor total a pagar")
+    print("7. Actualizar estado de mesa a pagado")
+    print("8. Salir del sistema")
     print("-"*25)
     return read_user_int()
